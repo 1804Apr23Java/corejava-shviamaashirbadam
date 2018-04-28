@@ -1,8 +1,14 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class EvaluationService {
 
@@ -15,7 +21,7 @@ public class EvaluationService {
 	 */
 	public String reverse(String string) {
 		char[] reversed = new char[string.length()];
-		for (int i = reversed.length - 1, j=0; i >= 0; i--, j++) {
+		for (int i = reversed.length - 1, j = 0; i >= 0; i--, j++) {
 			reversed[j] = string.charAt(i);
 		}
 		return new String(reversed);
@@ -31,7 +37,17 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		
+		String newPhrase =" ";
+		newPhrase=phrase.replaceAll("[,-]", "");
+		
+		String initialLetter=" "; // Creating an empty String
+		for (String s : newPhrase.split(" ")) {
+			initialLetter += s.charAt(0);
+		}
+		System.out.println(initialLetter);
+		return initialLetter.toUpperCase();
+
 	}
 
 	/**
@@ -85,16 +101,34 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
+			if (this.getSideOne() == this.getSideTwo() && this.getSideOne() == this.getSideThree()) {
+			//	System.out.println("Trianle is Equilateral");
+				return true;
+			}
+			else
 			return false;
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
+			if (this.getSideOne() == this.getSideTwo() || this.getSideOne() == this.getSideThree()
+					|| this.getSideTwo() == this.getSideThree()) {
+				//System.out.println("Trianle is isIsoceles");
+				return true;
+			}
+			else
 			return false;
+
 		}
 
 		public boolean isScalene() {
 			// TODO Write an implementation for this method declaration
+			if (this.getSideOne() != this.getSideTwo() || this.getSideOne() != this.getSideThree()
+					|| this.getSideTwo() != this.getSideThree()) {
+			//	System.out.println("Trianle is isScalene");
+				return true;
+			}
+			else
 			return false;
 		}
 
@@ -116,8 +150,71 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+	
+		Map<Character,Integer> mp = new HashMap<Character,Integer>();
+		
+		string=string.toLowerCase();
+		
+
+		for (int i=0;i<string.length();i++) {
+
+			if (string.charAt(i) == 'a' || string.charAt(i) == 'e' || string.charAt(i) == 'i' || string.charAt(i) == 'o'
+					|| string.charAt(i) == 'u' || string.charAt(i) == 'l' || string.charAt(i) == 'n'
+					|| string.charAt(i) == 'r' || string.charAt(i) == 's' || string.charAt(i) == 't') {
+
+						mp.put(string.charAt(i), 1);
+						
+            }
+			if (string.charAt(i) == 'd' || string.charAt(i) == 'g' ) {
+
+						mp.put(string.charAt(i), 2);
+						
+            }
+			if (string.charAt(i) == 'b' || string.charAt(i) == 'c' ||
+					string.charAt(i) == 'm' || string.charAt(i) == 'p') {
+
+						mp.put(string.charAt(i), 3);
+						
+            }
+			if (string.charAt(i) == 'f' || string.charAt(i) == 'h' ||
+					string.charAt(i) == 'v' || string.charAt(i) == 'w' ||
+					string.charAt(i) == 'y' ) {
+
+						mp.put(string.charAt(i), 4);
+						
+            }
+			if (string.charAt(i) == 'k') {
+
+						mp.put(string.charAt(i), 5);
+						
+            }
+			if (string.charAt(i) == 'j' || string.charAt(i) == 'x') {
+
+						mp.put(string.charAt(i), 8);
+					
+            }
+			if (string.charAt(i) == 'q' || string.charAt(i) == 'z' ) {
+
+						mp.put(string.charAt(i), 10);
+					
+            }	
+			
+			else {
+				//System.out.println("Invalid");
+			}
+		
+			
+		}
+		int totalValue = 0;
+
+        for (int j = 0; j < string.length(); j++) {
+
+            totalValue += mp.get(string.charAt(j));
+        }
+        
+       
+        return totalValue;
+
 	}
 
 	/**
@@ -152,8 +249,41 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String NUserInput = "";
+		String UserInput="";
+		String NewInput="";
+		try {
+
+			//UserInput = string.trim();
+			
+			NUserInput = string.replaceAll("[\\ ( - . )  ]", "");
+			NewInput = NUserInput.replaceAll("\\D", "");
+			UserInput = NewInput.replaceAll("\\s", "");
+			System.out.println(UserInput);
+
+			if (UserInput.length() < 10) {
+				System.out.println("Invalid Number");
+			}
+			if (!UserInput.matches(".*[0-9].*")) {
+
+				throw new IllegalArgumentException();
+			}
+			if (UserInput.length() == 11 && UserInput.charAt(0) != '1') {
+
+				System.out.println("Not a valid number");
+			}
+
+			if (UserInput.length() == 10 && UserInput.charAt(0) == '1' || UserInput.charAt(3) == '1') {
+
+				System.out.println("Not a valid number");
+			}
+
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+
+		return UserInput;
+
 	}
 
 	/**
@@ -166,8 +296,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		String[] newString = string.split(" ");
+		for (int i = 0; i < newString.length; i++) {
+
+			String tmp = newString[i];
+
+			if (map.containsKey(tmp)) {
+				int count = map.get(tmp);
+				map.put(tmp, count + 1);
+			} else {
+				map.put(tmp, 1);
+			}
+		}
+		return map;
+
 	}
 
 	/**
@@ -245,10 +388,49 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+	public int firstVowel(String word) {
+		word = word.toLowerCase();
+		for (int i = 0; i < word.length(); i++)
+			if (word.charAt(i) == 'a' || word.charAt(i) == 'e' || word.charAt(i) == 'i' || word.charAt(i) == 'o'
+					|| word.charAt(i) == 'u')
+				return i;
+		return 0;
 	}
+
+	  public String toPigLatin(String string) {
+		// TODO Write an implementation for this method declaration
+
+		String end = "";
+		String[] newString = string.split(" ");
+		
+		//char Vowel = {'a','e','i','o','u'};
+		int x;
+		for (int i = 0; i < newString.length; i++) {
+			if (newString[i].startsWith("a") || newString[i].startsWith("e") || newString[i].startsWith("i")
+					|| newString[i].startsWith("o") || newString[i].startsWith("u")) {
+
+				end += newString[i].concat("ay");
+				System.out.println(end);
+
+			} 
+			else {
+				
+				x=firstVowel(newString[i]);
+				
+				System.out.println(firstVowel(newString[i]));				
+				
+				end += newString[i].substring(x) + newString[i].substring(0, x) + "ay";
+				}
+			
+			}
+		
+	
+		
+		return end;
+	}
+
+	
 
 	/**
 	 * 9. An Armstrong number is a number that is the sum of its own digits each
@@ -267,7 +449,29 @@ public class EvaluationService {
 	 */
 	public boolean isArmstrongNumber(int input) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		int rem = 0;
+		double sum = 0.0;
+		int count = 0;
+
+		// Count a number of digits in input
+		int temp = input;
+		while (temp > 0) {
+			temp = temp / 10;
+			count = count + 1;
+		}
+		temp = input;
+		while (temp != 0) {
+
+			rem = temp % 10; // remainders: 3,5,0
+			sum = sum + Math.pow(rem, count);
+			temp = temp / 10; // 15,10,1
+
+		}
+		if (sum == input) {
+			return true;
+		} else
+			return false;
+
 	}
 
 	/**
@@ -282,9 +486,22 @@ public class EvaluationService {
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
 		// TODO Write an implementation for this method declaration
-		return null;
-	}
+		
+		List<Long> PrimeFactor = new ArrayList<Long>();
 
+		for (int i = 2; i <= l; i++) {
+
+			while (l % i == 0) {
+				PrimeFactor.add((long) i);
+				l /= i;
+
+			}
+
+		}
+		System.out.println(PrimeFactor);
+		return PrimeFactor;
+	}
+	
 	/**
 	 * 11. Create an implementation of the rotational cipher, also sometimes called
 	 * the Caesar cipher.
@@ -340,6 +557,23 @@ public class EvaluationService {
 	 */
 	public int calculateNthPrime(int i) {
 		// TODO Write an implementation for this method declaration
+		long l = 0;
+		
+		this.calculatePrimeFactorsOf(l);
+		
+		Set<Integer> calculateNthprimeNumber = new HashSet<Integer>();
+		
+		for (int j = 2; j <= l; j++) {
+
+			while (l % j == 0) {
+				calculateNthprimeNumber.add(j);
+				i /= j;
+
+			}
+
+		}
+		
+		
 		return 0;
 	}
 
@@ -420,9 +654,9 @@ public class EvaluationService {
 	}
 
 	/**
-	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
-	 * gramma, "every letter") is a sentence using every letter of the alphabet at
-	 * least once. The best known English pangram is:
+	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν
+	 * γ�?άμμα, pan gramma, "every letter") is a sentence using every letter of
+	 * the alphabet at least once. The best known English pangram is:
 	 * 
 	 * The quick brown fox jumps over the lazy dog.
 	 * 
@@ -465,7 +699,20 @@ public class EvaluationService {
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		int sum = 0;
+	Set<Integer> newSet = new HashSet<Integer>();
+		
+		for (int m: set)
+			for (int j = 1; j*m < i; j++)
+				newSet.add(j*m);
+		
+	
+		
+		for (Integer n: newSet)
+			sum += n;
+		
+		return sum;
+
 	}
 
 	/**
@@ -538,7 +785,41 @@ public class EvaluationService {
 	 */
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
-	}
+		// string = "what is 5 plus 10";
+		String Test = string.replaceAll("[^0-9 -]", " ");
+		String test2 = Test.replaceAll("\\s", " ");
+		String[] Test1 = test2.split(" ");
+		
 
+		int finalCalculate = 0;
+		
+
+		int[] num = new int[2];
+
+		for (int i = 0; i < Test1.length; i++) {
+			System.out.println(Test1[i].toString());
+
+			num[i] = Integer.parseInt(Test1[i]);
+			if (string.contains("plus")) {
+				finalCalculate += num[i];
+			}
+			if (string.contains("minus")) {
+				finalCalculate = num[0] - num[1];
+			}
+			if (string.contains("multiplied")) {
+				finalCalculate = (num[0] * num[1]);
+			}
+			if (string.contains("divided")) {
+				// System.out.println(num[0]+num[1]);
+
+				finalCalculate = (num[0] / num[1]);
+			} else {
+				throw new IllegalArgumentException();
+
+			}		
+
+		}
+		System.out.println(finalCalculate);
+		return finalCalculate;
+	}
 }
