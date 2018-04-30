@@ -1,5 +1,11 @@
 package com.revature.eval.java.core;
 
+import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,15 +44,17 @@ public class EvaluationService {
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
 		
-		String newPhrase =" ";
-		newPhrase=phrase.replaceAll("[,-]", "");
-		
-		String initialLetter=" "; // Creating an empty String
-		for (String s : newPhrase.split(" ")) {
+		String newPhrase = " ";
+		newPhrase = phrase.replaceAll(",-"," ");
+		String newPhrase2 = newPhrase.replaceAll("-"," ");
+
+		String initialLetter = " "; // Creating an empty String
+		for (String s : newPhrase2.split(" ")) {
 			initialLetter += s.charAt(0);
+			
 		}
-		System.out.println(initialLetter);
-		return initialLetter.toUpperCase();
+		System.out.println(initialLetter.toUpperCase());
+		return initialLetter.toUpperCase().trim();
 
 	}
 
@@ -250,36 +258,35 @@ public class EvaluationService {
 	 */
 	public String cleanPhoneNumber(String string) {
 		String NUserInput = "";
-		String UserInput="";
-		String NewInput="";
-		try {
+		String UserInput = "";
+		String NewInput = "";
 
-			//UserInput = string.trim();
-			
-			NUserInput = string.replaceAll("[\\ ( - . )  ]", "");
-			NewInput = NUserInput.replaceAll("\\D", "");
-			UserInput = NewInput.replaceAll("\\s", "");
-			System.out.println(UserInput);
+		NUserInput = string.replaceAll("[\\ ( - . )  ]", "");
+		NewInput = NUserInput.replaceAll("\\D", "");
+		UserInput = NewInput.replaceAll("\\s", "");
+		System.out.println(UserInput);
 
-			if (UserInput.length() < 10) {
-				System.out.println("Invalid Number");
-			}
-			if (!UserInput.matches(".*[0-9].*")) {
+		if (UserInput.length() < 10) {
+			System.out.println("Invalid Number");
+		}
 
-				throw new IllegalArgumentException();
-			}
-			if (UserInput.length() == 11 && UserInput.charAt(0) != '1') {
+		if (!UserInput.matches(".*[0-9].*")) {
 
-				System.out.println("Not a valid number");
-			}
+			throw new IllegalArgumentException();
+		}
+		if (UserInput.length() == 11 && UserInput.charAt(0) != '1') {
 
-			if (UserInput.length() == 10 && UserInput.charAt(0) == '1' || UserInput.charAt(3) == '1') {
+			System.out.println("Not a valid number");
+		}
 
-				System.out.println("Not a valid number");
-			}
+		if (UserInput.length() == 10 && UserInput.charAt(0) == '1' || UserInput.charAt(3) == '1') {
 
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			System.out.println("Not a valid number");
+		}
+
+		if (UserInput.length() > 11){
+			throw new IllegalArgumentException();
+
 		}
 
 		return UserInput;
@@ -297,7 +304,10 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		String[] newString = string.split(" ");
+		String string3 = string.replaceAll(",", "");
+		String string2 = string3.replaceAll("\n", " ");
+
+		String[] newString = string2.split(" ");
 		for (int i = 0; i < newString.length; i++) {
 
 			String tmp = newString[i];
@@ -348,12 +358,32 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch<T>  {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
 			return 0;
+	/*		int middle = 0;
+			int num = Integer.parseInt(t.toString());
+			int start = 0;
+			int end = sortedList.size() - 1;
+
+			while (start < end) {
+				middle = (start + end) / 2;
+				if (middle == num) {
+					return middle;
+					
+
+				} else if (middle > num) {
+					start = middle;
+					
+				} else {
+					end = middle;
+					System.out.println(middle);
+				}
+
+			}
+			return sortedList.indexOf(num);*/
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -391,11 +421,12 @@ public class EvaluationService {
 
 	public int firstVowel(String word) {
 		word = word.toLowerCase();
+		int j=0;
 		for (int i = 0; i < word.length(); i++)
 			if (word.charAt(i) == 'a' || word.charAt(i) == 'e' || word.charAt(i) == 'i' || word.charAt(i) == 'o'
 					|| word.charAt(i) == 'u')
-				return i;
-		return 0;
+				return j=i;
+		return j;
 	}
 
 	  public String toPigLatin(String string) {
@@ -404,7 +435,7 @@ public class EvaluationService {
 		String end = "";
 		String[] newString = string.split(" ");
 		
-		//char Vowel = {'a','e','i','o','u'};
+	
 		int x;
 		for (int i = 0; i < newString.length; i++) {
 			if (newString[i].startsWith("a") || newString[i].startsWith("e") || newString[i].startsWith("i")
@@ -529,6 +560,8 @@ public class EvaluationService {
 	 * quick brown fox jumps over the lazy dog.
 	 */
 	static class RotationalCipher {
+		
+		 
 		private int key;
 
 		public RotationalCipher(int key) {
@@ -538,7 +571,42 @@ public class EvaluationService {
 
 		public String rotate(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			if (key >= 26) {
+				key = key % 26;
+			} else if (key <= 0) {
+				key = ((key % 26) + 26);
+			}
+
+			String result = "";
+
+			for (int i = 0; i < string.length(); i++) {
+				char ch = string.charAt(i);
+
+				if (Character.isLetter(ch)) {
+					if (Character.isLowerCase(ch)) {
+						char c = (char) (ch + key);
+						if (ch > 'z' ) {
+							result += (char) (122 - (26 - key));
+						} else {
+							result += c;
+						}
+
+					} else if (Character.isUpperCase(ch)) {
+						char c = (char) (ch + key);
+						if (ch > 'Z') {
+							result += (char) (c - (26 - key));
+						} else {
+							result += c;
+						}
+
+					}
+				} else {
+					result += ch;
+				}
+
+			}
+			return result;
+
 		}
 
 	}
@@ -557,24 +625,26 @@ public class EvaluationService {
 	 */
 	public int calculateNthPrime(int i) {
 		// TODO Write an implementation for this method declaration
-		long l = 0;
-		
-		this.calculatePrimeFactorsOf(l);
-		
-		Set<Integer> calculateNthprimeNumber = new HashSet<Integer>();
-		
-		for (int j = 2; j <= l; j++) {
 
-			while (l % j == 0) {
-				calculateNthprimeNumber.add(j);
-				i /= j;
+		int num = 0;
+		int count = 0;
+		int j;
+		if (i < 1)
+			throw new IllegalArgumentException();
 
+		while (count < i) {
+			num = num + 1;
+			for (j = 2; j <= num; j++) {
+				if (num % j == 0) {
+					break;
+				}
 			}
-
+			if (j == num) {
+				count = count + 1;
+			}
 		}
-		
-		
-		return 0;
+
+		return num;
 	}
 
 	/**
@@ -609,9 +679,42 @@ public class EvaluationService {
 		 * @param string
 		 * @return
 		 */
+		
+		public static final String PLAIN ="abcdefghijklmnopqrstuvwxyz";
+		
 		public static String encode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			
+			StringBuffer newString = new StringBuffer();
+			
+			char ch;
+			int counter=0;
+			
+			for (int i=0;i<string.length();i++) {
+				ch=string.charAt(i);
+				if(Character.isLetter(ch)) {
+					if(ch>=65 && ch<=90) {
+						ch= (char) (90-(ch-65));
+					}
+					if (ch>=97&&ch<=122) {
+						ch= (char) (122-(ch-97));
+					}
+					
+					newString=newString.append(ch);
+					counter++;
+				}
+				if(Character.isDigit(ch)) {
+					newString.append(ch);
+					counter++;
+				}
+				if(counter%5==0 && newString.lastIndexOf(" ")!=newString.length()-1) {
+					newString.append(" ");
+				}
+			}
+			
+			
+
+			return newString.toString().toLowerCase();
 		}
 
 		/**
@@ -621,9 +724,36 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
-		}
+		
+		StringBuffer newString = new StringBuffer();
+			
+			char ch;
+			int counter=0;
+			
+			for (int i=0;i<string.length();i++) {
+				ch=string.charAt(i);
+				if(Character.isLetter(ch)) {
+					if(ch>=65 && ch<=90) {
+						ch= (char) (90-(ch-65));
+					}
+					if (ch>=97&&ch<=122) {
+						ch= (char) (122-(ch-97));
+					}
+					
+					newString=newString.append(ch);
+					counter++;
+				}
+				if(Character.isDigit(ch)) {
+					newString.append(ch);
+					counter++;
+				}
+				
+			}
+			
+			
+
+			return newString.toString().toLowerCase();
+		}	
 	}
 
 	/**
@@ -650,7 +780,23 @@ public class EvaluationService {
 	 */
 	public boolean isValidIsbn(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		String NewString = string.replaceAll("\\-", " ");
+		String FinalString = NewString.replaceAll("\\s", "");
+		
+		int sum = 0;		
+		for (int i=0;i<10;i++) {
+			Character test = FinalString.charAt(i);
+			if (Character.isDigit(test)) {
+				sum += Character.getNumericValue(test) * (10 - i);
+			} else if ((i == 9) && (test == 'x')) {
+				sum += 10;
+			} else
+				return false;
+
+		}
+		return (sum % 11 == 0);
+		
+	
 	}
 
 	/**
@@ -668,8 +814,30 @@ public class EvaluationService {
 	 */
 	public boolean isPangram(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		
+		Set<Character> charSet = new HashSet<>();
+
+		String newString = string.toLowerCase();
+
+		char[] charArray = newString.toCharArray();
+
+		if (string == null || string.length() < 26) {
+			return false;
+		}
+
+		for (char c : charArray) {
+			if (Character.isLetter(c) && !Character.isWhitespace(c)) {
+				charSet.add(c);
+			}
+		}
+		if (charSet.size() == 26) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
+	
 
 	/**
 	 * 17. Calculate the moment when someone has lived for 10^9 seconds.
@@ -680,8 +848,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		// TODO Write an implementation for this method declaration		
+	
+			LocalDateTime returnldt = null;
+		if (given instanceof LocalDateTime) {
+			returnldt = ((LocalDateTime) given).plusSeconds(1000000000);
+		}
+		if (given instanceof LocalDate) {
+			LocalDate newGiven = (LocalDate) given;
+			LocalDateTime newFormat = LocalDateTime.of(newGiven.getYear(), newGiven.getMonth(),
+					newGiven.getDayOfMonth(), 0, 0, 0);
+			returnldt = (LocalDateTime) newFormat.plusSeconds(1000000000);
+		} else {
+			System.out.println("Invalid");
+		}
+
+		return returnldt;
+
 	}
 
 	/**
@@ -753,7 +936,35 @@ public class EvaluationService {
 	 */
 	public boolean isLuhnValid(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		
+		List<Integer> newList = new ArrayList<Integer>();
+		int num = 0;
+		String newString = "";
+		newString = string.replaceAll("\\s", "");
+		System.out.println(newString);
+
+		int sum = 0;
+		boolean evennumbered = false;
+		try {
+			for (int i = 0; i < newString.length(); i++) {
+				num = Integer.parseInt(newString.substring(i, i + 1));
+				if (evennumbered) {
+					num *= 2;
+					newList.add(num);
+					if (num > 9) {
+						num = (num % 10) + 1;
+					newList.add(num);
+					}
+				}
+				sum += num;
+				evennumbered = !evennumbered;
+			}
+			return (sum % 10 == 0);
+
+		} catch (NumberFormatException e) {
+			return false;
+		}
+
 	}
 
 	/**
@@ -785,41 +996,31 @@ public class EvaluationService {
 	 */
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
-		// string = "what is 5 plus 10";
-		String Test = string.replaceAll("[^0-9 -]", " ");
-		String test2 = Test.replaceAll("\\s", " ");
-		String[] Test1 = test2.split(" ");
 		
-
-		int finalCalculate = 0;
-		
-
+		String[] Test1 = string.split("[\\s|?]");
 		int[] num = new int[2];
+		System.out.println(Test1[2].toString());
+		System.out.println(Test1[Test1.length-1].toString());
+		
+		num[0] = Integer.parseInt(Test1[2]);
+		num[1] = Integer.parseInt(Test1[Test1.length - 1]);
 
-		for (int i = 0; i < Test1.length; i++) {
-			System.out.println(Test1[i].toString());
+		if (string.contains("plus")) {
+			return( num[0] + num[1]);
+		}
+		if (string.contains("minus")) {
+			return (num[0] - (num[1]));
+		}
+		if (string.contains("multiplied")) {
+			return  (num[0] * num[1]);
+		}
+		if (string.contains("divided")) {
+			// System.out.println(num[0]+num[1]);
 
-			num[i] = Integer.parseInt(Test1[i]);
-			if (string.contains("plus")) {
-				finalCalculate += num[i];
-			}
-			if (string.contains("minus")) {
-				finalCalculate = num[0] - num[1];
-			}
-			if (string.contains("multiplied")) {
-				finalCalculate = (num[0] * num[1]);
-			}
-			if (string.contains("divided")) {
-				// System.out.println(num[0]+num[1]);
-
-				finalCalculate = (num[0] / num[1]);
-			} else {
-				throw new IllegalArgumentException();
-
-			}		
+			return(num[0] / num[1]);
+		} else {
+			throw new IllegalArgumentException();
 
 		}
-		System.out.println(finalCalculate);
-		return finalCalculate;
 	}
 }
