@@ -358,32 +358,33 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T>  {
+	static class BinarySearch<T> implements Comparable<T> {
 		private List<T> sortedList;
 
+		@SuppressWarnings("unchecked")
 		public int indexOf(T t) {
-			return 0;
-	/*		int middle = 0;
-			int num = Integer.parseInt(t.toString());
+
 			int start = 0;
 			int end = sortedList.size() - 1;
+			
 
-			while (start < end) {
-				middle = (start + end) / 2;
-				if (middle == num) {
+			while (start <= end) {
+				int middle = (start + end) / 2;
+				
+
+				if ( ((Comparable<T>) sortedList.get(middle)).compareTo(t) == 0) {
 					return middle;
-					
-
-				} else if (middle > num) {
-					start = middle;
-					
-				} else {
-					end = middle;
-					System.out.println(middle);
 				}
 
+				if (((Comparable<T>) sortedList.get(middle)).compareTo(t) == 1) {
+					end = middle - 1;
+				} else {
+					start = middle + 1;
+
+				}
 			}
-			return sortedList.indexOf(num);*/
+			return -1;
+
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -397,6 +398,12 @@ public class EvaluationService {
 
 		public void setSortedList(List<T> sortedList) {
 			this.sortedList = sortedList;
+		}
+
+		@Override
+		public int compareTo(T o) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
@@ -586,7 +593,7 @@ public class EvaluationService {
 					if (Character.isLowerCase(ch)) {
 						char c = (char) (ch + key);
 						if (ch > 'z' ) {
-							result += (char) (122 - (26 - key));
+							result += (char) (c - (26 - key));
 						} else {
 							result += c;
 						}
